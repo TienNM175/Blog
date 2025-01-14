@@ -1,11 +1,18 @@
-import React, { useRef } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { Card, CardContent, Typography, Grid, Button, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { postApi } from '../services/postApi';
-import { Error } from '@/shared/components/Error';
-import { Loading } from '@/shared/components/Loading';
-import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
+import React, { useRef } from "react";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import {
+  Card,
+  CardContent,
+  Typography,
+  Grid2,
+  Button,
+  Box,
+} from "@mui/material";
+import { Link } from "react-router-dom";
+import { postApi } from "../services/postApi";
+import { Error } from "@/shared/components/Error";
+import { Loading } from "@/shared/components/Loading";
+import { useInfiniteScroll } from "@/shared/hooks/useInfiniteScroll";
 
 interface PostListProps {
   userId: number;
@@ -14,21 +21,16 @@ interface PostListProps {
 export const PostList: React.FC<PostListProps> = ({ userId }) => {
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isLoading,
-    isError,
-    error
-  } = useInfiniteQuery({
-    queryKey: ['posts', userId], 
-    queryFn: ({ pageParam = 1 }) => postApi.getPosts(userId, { page: pageParam, per_page: 10 }), 
-    getNextPageParam: (lastPage, allPages) => {
-      return lastPage.length === 10 ? allPages.length + 1 : undefined;
-    },
-    initialPageParam: 1, // Initial page number
-  });
+  const { data, fetchNextPage, hasNextPage, isLoading, isError, error } =
+    useInfiniteQuery({
+      queryKey: ["posts", userId],
+      queryFn: ({ pageParam = 1 }) =>
+        postApi.getPosts(userId, { page: pageParam, per_page: 10 }),
+      getNextPageParam: (lastPage, allPages) => {
+        return lastPage.length === 10 ? allPages.length + 1 : undefined;
+      },
+      initialPageParam: 1, // Initial page number
+    });
 
   useInfiniteScroll(loadMoreRef, () => {
     if (hasNextPage) {
@@ -40,15 +42,17 @@ export const PostList: React.FC<PostListProps> = ({ userId }) => {
   if (isError) return <Error message={(error as Error).message} />;
 
   return (
-    <Grid container spacing={2}>
+    <Grid2 container spacing={2}>
       {data?.pages.map((page, pageIndex) => (
         <React.Fragment key={pageIndex}>
           {page.map((post) => (
-            <Grid item xs={12} key={post.id}>
+            <Grid2 size={12} key={post.id}>
               <Card>
                 <CardContent>
                   <Typography variant="h6">{post.title}</Typography>
-                  <Typography color="textSecondary" noWrap>{post.body}</Typography>
+                  <Typography color="textSecondary" noWrap>
+                    {post.body}
+                  </Typography>
                   <Box sx={{ mt: 2 }}>
                     <Button
                       component={Link}
@@ -62,11 +66,11 @@ export const PostList: React.FC<PostListProps> = ({ userId }) => {
                   </Box>
                 </CardContent>
               </Card>
-            </Grid>
+            </Grid2>
           ))}
         </React.Fragment>
       ))}
-      <div ref={loadMoreRef} style={{ height: '20px', width: '100%' }} />
-    </Grid>
+      <div ref={loadMoreRef} style={{ height: "20px", width: "100%" }} />
+    </Grid2>
   );
 };

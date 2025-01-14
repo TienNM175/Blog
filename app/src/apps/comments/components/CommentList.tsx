@@ -26,7 +26,7 @@ export const CommentList: React.FC<CommentListProps> = ({ postId }) => {
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length === 10 ? allPages.length + 1 : undefined;
     },
-    initialPageParam: 1,  // Providing initialPageParam here
+    initialPageParam: 1,  // Initial page number
   });
 
   useInfiniteScroll(loadMoreRef, () => {
