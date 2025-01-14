@@ -10,6 +10,7 @@ interface CommentListProps {
   postId: number;
 }
 
+
 export const CommentList: React.FC<CommentListProps> = ({ postId }) => {
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
