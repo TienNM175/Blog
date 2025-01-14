@@ -1,6 +1,6 @@
 import api from '@/shared/config/axios';
 import { User } from '../types/user.types';
-import { PaginationParams, ApiResponse } from '@/shared/types/common.types';
+import { PaginationParams } from '@/shared/types/common.types';
 
 export const userApi = {
   getUsers: async ({ page, per_page }: PaginationParams) => {
