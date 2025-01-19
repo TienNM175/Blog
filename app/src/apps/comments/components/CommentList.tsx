@@ -5,6 +5,7 @@ import { commentApi } from '../services/commentApi';
 import { Loading } from '@/shared/components/Loading';
 import { Error } from '@/shared/components/Error';
 import { useInfiniteScroll } from '@/shared/hooks/useInfiniteScroll';
+import { LoadMore } from '@/shared/components/LoadMore';
 
 interface CommentListProps {
   postId: number;
@@ -57,7 +58,7 @@ export const CommentList: React.FC<CommentListProps> = ({ postId }) => {
           ))}
         </React.Fragment>
       ))}
-      <div ref={loadMoreRef} style={{ height: '20px', width: '100%' }} />
+      <LoadMore ref = {loadMoreRef}/>
     </Box>
   );
 };

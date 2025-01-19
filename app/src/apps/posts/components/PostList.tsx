@@ -1,18 +1,12 @@
 import React, { useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Grid2,
-  Button,
-  Box,
-} from "@mui/material";
-import { Link } from "react-router-dom";
+import { Grid2 } from "@mui/material";
 import { postApi } from "../services/postApi";
 import { Error } from "@/shared/components/Error";
 import { Loading } from "@/shared/components/Loading";
 import { useInfiniteScroll } from "@/shared/hooks/useInfiniteScroll";
+import { LoadMore } from "@/shared/components/LoadMore";
+import { PostItem } from "./PostItem";
 
 interface PostListProps {
   userId: number;
@@ -29,7 +23,7 @@ export const PostList: React.FC<PostListProps> = ({ userId }) => {
       getNextPageParam: (lastPage, allPages) => {
         return lastPage.length === 10 ? allPages.length + 1 : undefined;
       },
-      initialPageParam: 1, // Initial page number
+      initialPageParam: 1,
     });
 
   useInfiniteScroll(loadMoreRef, () => {
@@ -47,30 +41,12 @@ export const PostList: React.FC<PostListProps> = ({ userId }) => {
         <React.Fragment key={pageIndex}>
           {page.map((post) => (
             <Grid2 size={12} key={post.id}>
-              <Card>
-                <CardContent>
-                  <Typography variant="h6">{post.title}</Typography>
-                  <Typography color="textSecondary" noWrap>
-                    {post.body}
-                  </Typography>
-                  <Box sx={{ mt: 2 }}>
-                    <Button
-                      component={Link}
-                      to={`/posts/${post.id}`}
-                      variant="outlined"
-                      size="small"
-                      sx={{ mr: 1 }}
-                    >
-                      View Details
-                    </Button>
-                  </Box>
-                </CardContent>
-              </Card>
+              <PostItem post={post} />
             </Grid2>
           ))}
         </React.Fragment>
       ))}
-      <div ref={loadMoreRef} style={{ height: "20px", width: "100%" }} />
+      <LoadMore ref={loadMoreRef} />
     </Grid2>
   );
 };
