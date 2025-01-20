@@ -7,6 +7,7 @@ import { Loading } from "@/shared/components/Loading";
 import { useInfiniteScroll } from "@/shared/hooks/useInfiniteScroll";
 import { LoadMore } from "@/shared/components/LoadMore";
 import { PostItem } from "./PostItem";
+import { PAGINATION } from "@/shared/constants/pagination";
 
 interface PostListProps {
   userId: number;
@@ -18,12 +19,17 @@ export const PostList: React.FC<PostListProps> = ({ userId }) => {
   const { data, fetchNextPage, hasNextPage, isLoading, isError, error } =
     useInfiniteQuery({
       queryKey: ["posts", userId],
-      queryFn: ({ pageParam = 1 }) =>
-        postApi.getPosts(userId, { page: pageParam, per_page: 10 }),
+      queryFn: ({ pageParam = PAGINATION.DEFAULT_PAGE }) =>
+        postApi.getPosts(userId, {
+          page: pageParam,
+          per_page: PAGINATION.PER_PAGE,
+        }),
       getNextPageParam: (lastPage, allPages) => {
-        return lastPage.length === 10 ? allPages.length + 1 : undefined;
+        return lastPage.length === PAGINATION.PER_PAGE
+          ? allPages.length + 1
+          : undefined;
       },
-      initialPageParam: 1,
+      initialPageParam: PAGINATION.DEFAULT_PAGE,
     });
 
   useInfiniteScroll(loadMoreRef, () => {
