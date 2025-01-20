@@ -11,13 +11,10 @@ import { Link } from "react-router-dom";
 import { grey } from "@mui/material/colors";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import { Post } from "../types/post.types"; 
 
 interface PostItemProps {
-  post: {
-    id: number;
-    title: string;
-    body: string;
-  };
+  post: Post;
 }
 
 export const PostItem: React.FC<PostItemProps> = ({ post }) => (
