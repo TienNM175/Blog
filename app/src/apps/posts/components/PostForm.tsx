@@ -143,8 +143,23 @@ export const PostForm: React.FC<PostFormProps> = ({
         )}
       />
 
-      <Button type="submit" variant="contained" color="primary" size="large">
-        Create Post
+      <Button
+        type="submit"
+        variant="contained"
+        sx={{
+          borderRadius: 2,
+          px: 3,
+          py: 1,
+          textTransform: "none",
+          background: "linear-gradient(135deg, #4F46E5 0%, #9333EA 100%)",
+          boxShadow: "0 4px 12px rgba(79, 70, 229, 0.3)",
+          "&:hover": {
+            transform: "translateY(-2px)",
+          },
+          transition: "all 0.3s ease",
+        }}
+      >
+        {initialData ? "Edit Post" : "Create Post"}
       </Button>
     </Box>
   );
