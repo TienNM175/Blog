@@ -1,13 +1,7 @@
 import React from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  Box,
-  Typography,
-  Dialog,
-  IconButton,
-  Paper,
-} from "@mui/material";
+import { Box, Typography, Dialog, IconButton, Paper } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { postApi } from "../services/postApi";
 import { Error } from "@/shared/components/Error";
@@ -15,6 +9,7 @@ import { Loading } from "@/shared/components/Loading";
 import { PostForm } from "./PostForm";
 import { CommentList } from "@/apps/comments/components/CommentList";
 import { PostDetailCard } from "./PostDetailCard";
+import { useUser } from "@/shared/contexts/UserContext";
 
 export const PostDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -22,15 +17,26 @@ export const PostDetails: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const [isEditDialogOpen, setIsEditDialogOpen] = React.useState(false);
+  const { getUser } = useUser();
 
   const {
     data: post,
-    isLoading,
-    isError,
-    error,
+    isLoading: isPostLoading,
+    isError: isPostError,
+    error: postError,
   } = useQuery({
     queryKey: ["post", postId],
     queryFn: () => postApi.getPostById(postId),
+  });
+
+  const {
+    data: user,
+    isLoading: isUserLoading,
+    isError: isUserError,
+    error: userError,
+  } = useQuery({
+    queryKey: ["user", post?.user_id],
+    queryFn: () => getUser(post?.user_id!),
   });
 
   const deleteMutation = useMutation({
@@ -50,8 +56,9 @@ export const PostDetails: React.FC = () => {
     },
   });
 
-  if (isLoading) return <Loading />;
-  if (isError) return <Error message={(error as Error).message} />;
+  if (isPostLoading || isUserLoading) return <Loading />;
+  if (isPostError) return <Error message={(postError as Error).message} />;
+  if (isUserError) return <Error message={(userError as Error).message} />;
   if (!post) return <Error message="Post not found" />;
 
   const handleDelete = () => {
@@ -120,7 +127,7 @@ export const PostDetails: React.FC = () => {
           >
             <CloseIcon />
           </IconButton>
-          
+
           <Typography
             variant="h5"
             sx={{
@@ -134,13 +141,14 @@ export const PostDetails: React.FC = () => {
           >
             Edit Post
           </Typography>
-          
+
           <PostForm
             initialData={post}
             onSubmit={(data) => {
               updateMutation.mutate({ id: postId, data });
             }}
             userId={post.user_id}
+            userName={user?.name}
           />
         </Box>
       </Dialog>

@@ -17,11 +17,12 @@ import { CreatePostDto } from "../types/post.types";
 interface PostFormProps {
   initialData?: Partial<CreatePostDto>;
   onSubmit: (data: CreatePostDto) => void;
-  users: User[];
-  onLoadMore: () => void;
+  users?: User[];
+  onLoadMore?: () => void;
   hasMore?: boolean;
   isLoadingMore?: boolean;
   userId?: number;
+  userName?: string;
 }
 
 export const PostForm: React.FC<PostFormProps> = ({
@@ -32,6 +33,7 @@ export const PostForm: React.FC<PostFormProps> = ({
   hasMore = false,
   isLoadingMore = false,
   userId,
+  userName,
 }) => {
   const {
     control,
@@ -50,7 +52,8 @@ export const PostForm: React.FC<PostFormProps> = ({
     if (
       element.scrollHeight - element.scrollTop === element.clientHeight &&
       hasMore &&
-      !isLoadingMore
+      !isLoadingMore &&
+      onLoadMore
     ) {
       onLoadMore();
     }
@@ -62,7 +65,7 @@ export const PostForm: React.FC<PostFormProps> = ({
       onSubmit={handleSubmit(onSubmit)}
       sx={{ display: "flex", flexDirection: "column", gap: 2 }}
     >
-      {!userId && (
+      {!userId && users && (
         <Controller
           name="user_id"
           control={control}
@@ -72,7 +75,7 @@ export const PostForm: React.FC<PostFormProps> = ({
           }}
           render={({ field: { value, onChange, ...field } }) => (
             <FormControl error={!!errors.user_id} fullWidth>
-              <InputLabel>Select User</InputLabel>
+              <InputLabel>Select Author</InputLabel>
               <Select
                 {...field}
                 value={value || ""}
@@ -98,7 +101,7 @@ export const PostForm: React.FC<PostFormProps> = ({
                       width="100%"
                       py={1}
                     >
-                      <CircularProgress size={20} />
+                      <CircularProgress size={30} />
                     </Box>
                   </MenuItem>
                 )}
@@ -109,6 +112,16 @@ export const PostForm: React.FC<PostFormProps> = ({
             </FormControl>
           )}
         />
+      )}
+
+      {userName && (
+          <TextField
+            label="Author"
+            value={userName}
+            disabled
+            fullWidth
+            variant="outlined" 
+          />
       )}
 
       <Controller

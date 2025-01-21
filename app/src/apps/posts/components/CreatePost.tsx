@@ -31,7 +31,7 @@ export const CreatePost: React.FC = () => {
     queryFn: ({ pageParam = PAGINATION.DEFAULT_PAGE }) =>
       userApi.getUsers({
         page: pageParam,
-        per_page: PAGINATION.DEFAULT_PAGE,
+        per_page: PAGINATION.PER_PAGE,
       }),
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length === PAGINATION.PER_PAGE ? allPages.length + 1 : undefined;

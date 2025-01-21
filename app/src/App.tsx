@@ -1,10 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; // Use BrowserRouter here
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'; 
 import { Layout } from './shared/components/Layout';
 import { UserList } from './apps/users/components/UserList';
 import { UserDetails } from './apps/users/components/UserDetails';
 import { PostDetails } from './apps/posts/components/PostDetails';
 import { CreatePost } from './apps/posts/components/CreatePost';
+import { UserProvider } from '@/apps/users/providers/UserProvider';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -18,6 +19,7 @@ const queryClient = new QueryClient({
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <UserProvider>
       <Router>
         <Layout>
           <Routes>
@@ -29,6 +31,7 @@ function App() {
           </Routes>
         </Layout>
       </Router>
+      </UserProvider>
     </QueryClientProvider>
   );
 }
