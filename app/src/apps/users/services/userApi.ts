@@ -3,9 +3,9 @@ import { User } from '../types/user.types';
 import { PaginationParams } from '@/shared/types/common.types';
 
 export const userApi = {
-  getUsers: async ({ page, per_page }: PaginationParams) => {
+  getUsers: async ({ page, per_page, search }: PaginationParams & { search?: string }) => {
     const response = await api.get<User[]>(`/users`, {
-      params: { page, per_page },
+      params: { page, per_page, name: search },
     });
     return response.data;
   },

@@ -124,7 +124,7 @@ export const PostItem: React.FC<PostItemProps> = ({ post }) => (
             color: grey[700],
             mb: 3,
             lineHeight: 1.7,
-            height: "4.5em",
+            height: "3.8em",
             overflow: "hidden",
             textOverflow: "ellipsis",
             display: "-webkit-box",

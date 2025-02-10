@@ -3,7 +3,6 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { Grid2 } from "@mui/material";
 import { postApi } from "../services/postApi";
 import { Error } from "@/shared/components/Error";
-import { Loading } from "@/shared/components/Loading";
 import { useInfiniteScroll } from "@/shared/hooks/useInfiniteScroll";
 import { LoadMore } from "@/shared/components/LoadMore";
 import { PostItem } from "./PostItem";
@@ -16,7 +15,7 @@ interface PostListProps {
 export const PostList: React.FC<PostListProps> = ({ userId }) => {
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  const { data, fetchNextPage, hasNextPage, isLoading, isError, error } =
+  const { data, fetchNextPage, hasNextPage, isError, error } =
     useInfiniteQuery({
       queryKey: ["posts", userId],
       queryFn: ({ pageParam = PAGINATION.DEFAULT_PAGE }) =>
@@ -38,7 +37,6 @@ export const PostList: React.FC<PostListProps> = ({ userId }) => {
     }
   });
 
-  if (isLoading) return <Loading />;
   if (isError) return <Error message={(error as Error).message} />;
 
   return (

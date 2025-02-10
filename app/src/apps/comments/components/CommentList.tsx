@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { Card, CardContent, Typography, Box } from "@mui/material";
 import { commentApi } from "../services/commentApi";
-import { Loading } from "@/shared/components/Loading";
 import { Error } from "@/shared/components/Error";
 import { useInfiniteScroll } from "@/shared/hooks/useInfiniteScroll";
 import { LoadMore } from "@/shared/components/LoadMore";
@@ -15,7 +14,7 @@ interface CommentListProps {
 export const CommentList: React.FC<CommentListProps> = ({ postId }) => {
   const loadMoreRef = useRef<HTMLDivElement>(null);
 
-  const { data, fetchNextPage, hasNextPage, isLoading, isError, error } =
+  const { data, fetchNextPage, hasNextPage, isError, error } =
     useInfiniteQuery({
       queryKey: ["comments", postId],
       queryFn: ({ pageParam = PAGINATION.DEFAULT_PAGE }) =>
@@ -37,7 +36,6 @@ export const CommentList: React.FC<CommentListProps> = ({ postId }) => {
     }
   });
 
-  if (isLoading) return <Loading />;
   if (isError) return <Error message={(error as Error).message} />;
 
   return (
